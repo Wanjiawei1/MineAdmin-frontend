@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { GoodsRecord } from '~/modules/goods/api/goods'
+import type { GoodsRecord } from '@/modules/goods/api/goods'
 import type { MaFormInstance } from '@mineadmin/pro-components'
 import { ref } from 'vue'
-import { add, edit, getById } from '~/modules/goods/api/goods'
+import { add, edit, getById } from '@/modules/goods/api/goods'
 
 const props = defineProps<{
   formType: 'add' | 'edit'
