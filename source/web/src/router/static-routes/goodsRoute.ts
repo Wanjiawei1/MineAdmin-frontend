@@ -4,7 +4,7 @@ const goodsRoute: RouteRecordRaw[] = [
   {
     path: '/goods',
     name: 'goods',
-    component: () => import('@/layouts/index.vue'),
+    component: () => import('@/layouts/index.tsx'),
     meta: {
       title: '商品管理',
       icon: 'icon-park-outline:commodity',
