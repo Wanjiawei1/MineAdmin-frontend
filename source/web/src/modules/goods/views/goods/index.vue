@@ -5,7 +5,7 @@ import type { TransType } from '@/hooks/auto-imports/useTrans.ts'
 import type { UseDialogExpose } from '@/hooks/useDialog.ts'
 
 // 导入API
-import { page, deleteByIds } from '~/modules/goods/api/goods'
+import { page, deleteByIds } from '@/modules/goods/api/goods'
 import getSearchItems from './data/getSearchItems.tsx'
 import getTableColumns from './data/getTableColumns.tsx'
 import useDialog from '@/hooks/useDialog.ts'

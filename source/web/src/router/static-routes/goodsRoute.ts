@@ -13,7 +13,7 @@ const goodsRoute: RouteRecordRaw[] = [
       {
         path: 'list',
         name: 'goodsList',
-        component: () => import('~/modules/goods/views/goods/index.vue'),
+        component: () => import('@/modules/goods/views/goods/index.vue'),
         meta: {
           title: '商品列表',
           auth: ['goods:goods:page'],

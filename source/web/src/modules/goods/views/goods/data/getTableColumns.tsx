@@ -2,7 +2,7 @@ import type { MaProTableColumn } from '@mineadmin/pro-table'
 import type { UseDialogExpose } from '@/hooks/useDialog.ts'
 import type { Ref } from 'vue'
 import type { TransType } from '@/hooks/auto-imports/useTrans.ts'
-import { changeStatus, deleteByIds } from '~/modules/goods/api/goods'
+import { changeStatus, deleteByIds } from '@/modules/goods/api/goods'
 import { useMessage } from '@/hooks/useMessage.ts'
 import { ResultCode } from '@/utils/ResultCode.ts'
 
