@@ -23,7 +23,7 @@ import { isEmpty } from 'radash'
 const { isLoading } = useNProgress()
 
 // 将所有静态路由合并
-const routes = [...rootRoute, ...dashboardRoute, ...welcomeRoute, ...goodsRoute]
+const routes = [...rootRoute, dashboardRoute, welcomeRoute, ...goodsRoute]
 
 const router = createRouter({
   history: import.meta.env.VITE_APP_ROUTE_MODE === 'history' ? createWebHistory() : createWebHashHistory(),
