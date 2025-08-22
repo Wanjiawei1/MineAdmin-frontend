@@ -1,0 +1,1 @@
+function r(){var e,t,o;return document.body.offsetHeight-(((e=document.querySelector(".mine-bars"))==null?void 0:e.offsetHeight)??0)-(((t=document.querySelector(".mine-header-main"))==null?void 0:t.offsetHeight)??0)-(((o=document.querySelector(".mine-footer"))==null?void 0:o.offsetHeight)??0)-48}export{r as g};

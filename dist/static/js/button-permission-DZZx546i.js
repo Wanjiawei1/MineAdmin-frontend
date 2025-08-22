@@ -1,0 +1,1 @@
+import{_ as o}from"./button-permission.vue_vue_type_script_setup_true_lang-B6g2lqUj.js";import"./index-BsGhlh_X.js";import"./__commonjsHelpers__-CqkleIqs.js";import"./useTable-Bt07anPD.js";import"./index.es-CqpDtOvG.js";import"./useTrans-kmCwB86_.js";export{o as default};
