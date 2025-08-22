@@ -10,7 +10,10 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { useNProgress } from '@vueuse/integrations/useNProgress'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
-import routes from './static-routes/rootRoute.ts'
+import rootRoute from './static-routes/rootRoute.ts'
+import dashboardRoute from './static-routes/dashboardRoute.ts'
+import welcomeRoute from './static-routes/welcomeRoute.ts'
+import goodsRoute from './static-routes/goodsRoute.ts'
 import '@/assets/styles/nprogress.scss'
 import hasAuth from '@/utils/permission/hasAuth.ts'
 import hasRole from '@/utils/permission/hasRole.ts'
@@ -18,6 +21,9 @@ import hasUser from '@/utils/permission/hasUser.ts'
 import { isEmpty } from 'radash'
 
 const { isLoading } = useNProgress()
+
+// 将所有静态路由合并
+const routes = [...rootRoute, ...dashboardRoute, ...welcomeRoute, ...goodsRoute]
 
 const router = createRouter({
   history: import.meta.env.VITE_APP_ROUTE_MODE === 'history' ? createWebHistory() : createWebHashHistory(),
