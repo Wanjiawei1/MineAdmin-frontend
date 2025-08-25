@@ -129,36 +129,49 @@ const useRouteStore = defineStore(
     function menuToRoutes(routerMap: any[]) {
       const accessedRouters: any = []
       routerMap.forEach((item: any) => {
-        if (item.meta?.type !== 'B') {
-          if (item.meta.type === 'I') {
-            item.path = `/MineIframe/${item.name}`
-            item.component = () => import(('@/layouts/components/iframe/index.tsx'))
-          }
-
-          const suffix: string = item.meta?.componentSuffix ?? '.vue'
-
-          let component: any | null = null
-          if (item.component && item.meta?.type !== 'I') {
-            if (moduleViews[`../../modules/${item.component}${suffix}`]) {
-              component = moduleViews[`../../modules/${item.component}${suffix}`]
-            }
-            else if (pluginViews[`../../plugins/${item.component}${suffix}`]) {
-              component = pluginViews[`../../plugins/${item.component}${suffix}`]
-            }
-            else {
-              // console.warn(`MineAdmin-UI: 路由 [${item.meta.title}] 找不到 ${item.component}${suffix} 页面`)
-            }
-          }
-
-          const route = {
-            path: item.path,
-            name: item.name,
-            meta: item.meta,
-            children: item.children ? menuToRoutes(item.children) : null,
-            component: item.meta?.type === 'I' ? item.component : component,
-          }
-          accessedRouters.push(route)
+        // 忽略按钮类型的菜单
+        if (item.type === 'B') {
+          return
         }
+
+        // --- 核心修正开始 ---
+        // 1. 创建 meta 对象，从后端返回的顶层字段映射过来
+        const meta = {
+          title: item.name, // 菜单标题
+          icon: item.icon,
+          type: item.type,
+          hidden: item.is_hidden === 1,
+          // 您可以根据需要，在这里添加后端返回的其他字段
+        }
+
+        // 2. 动态加载组件
+        let component: any | null = null
+        if (item.component) {
+          const componentPath = `../../modules/${item.component}.vue`
+          if (moduleViews[componentPath]) {
+            component = moduleViews[componentPath]
+          } else {
+            // 如果需要，可以添加 tsx/jsx 的支持
+            const tsxPath = `../../modules/${item.component}.tsx`
+            if (moduleViews[tsxPath]) {
+              component = moduleViews[tsxPath]
+            } else {
+              console.warn(`组件未找到: ${componentPath} 或 ${tsxPath}`)
+            }
+          }
+        }
+        // --- 核心修正结束 ---
+
+        // 3. 组装成一个正确的路由对象
+        const route: RouteRecordRaw = {
+          path: item.route, // 使用 `route` 字段作为路径
+          name: item.code,  // 使用 `code` 字段作为唯一名称
+          meta,             // 使用我们新创建的 meta 对象
+          redirect: item.redirect,
+          children: item.children && item.children.length > 0 ? menuToRoutes(item.children) : [],
+          component,
+        }
+        accessedRouters.push(route)
       })
       return accessedRouters
     }
