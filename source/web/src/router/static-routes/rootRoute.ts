@@ -26,7 +26,7 @@ const rootRoutes: RouteRecordRaw[] = [
   {
     name: 'login',
     path: '/login',
-    component: () => import(('~/base/views/login/index.vue')),
+    component: () => import('@/modules/base/views/login/index.vue'),
     meta: {
       title: '登录',
       i18n: 'menu.login',
