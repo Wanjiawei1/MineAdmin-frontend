@@ -89,6 +89,17 @@ const options = ref<MaProTableOptions>({
   // 请求配置
   requestOptions: {
     api: page,
+    beforeRequest: (params: any) => {
+      console.log('🚀 准备发起API请求，参数:', params)
+      return params
+    },
+    afterRequest: (res: any) => {
+      console.log('✅ API请求成功，响应:', res)
+      return res
+    },
+    onError: (error: any) => {
+      console.error('❌ API请求失败:', error)
+    },
   },
 })
 
@@ -140,40 +151,37 @@ function handleDelete() {
     <MaProTable ref="proTableRef" :options="options" :schema="schema">
       <template #actions>
         <el-button
-          v-auth="['goods:goods:save']"
           type="primary"
           @click="() => {
-            maDialog.setTitle(t('crud.add'))
+            maDialog.setTitle('新增商品')
             maDialog.open({ formType: 'add' })
           }"
         >
-          {{ t('crud.add') }}
+          新增商品
         </el-button>
       </template>
 
       <template #toolbarLeft>
         <el-button
-          v-auth="['goods:goods:delete']"
           type="danger"
           plain
           :disabled="selections.length < 1"
           @click="handleDelete"
         >
-          {{ t('crud.delete') }}
+          批量删除
         </el-button>
       </template>
       <!-- 数据为空时 -->
       <template #empty>
         <el-empty>
           <el-button
-            v-auth="['goods:goods:save']"
             type="primary"
             @click="() => {
-              maDialog.setTitle(t('crud.add'))
+              maDialog.setTitle('新增商品')
               maDialog.open({ formType: 'add' })
             }"
           >
-            {{ t('crud.add') }}
+            新增商品
           </el-button>
         </el-empty>
       </template>
