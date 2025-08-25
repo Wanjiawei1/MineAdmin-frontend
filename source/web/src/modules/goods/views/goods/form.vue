@@ -23,8 +23,8 @@ useForm('goodsForm').then((form: MaFormExpose) => {
   if (props.formType === 'edit' && props.data) {
     Object.assign(goodsModel.value, props.data)
   }
-  // 正确地传入 getFormItems() 返回对象中的 formItems 数组
-  form.setItems(getFormItems().formItems)
+  // 直接传入 getFormItems() 返回的数组，不需要 .formItems
+  form.setItems(getFormItems(props.formType, (key: string) => key, goodsModel.value))
   form.setOptions({
     labelWidth: '80px',
   })
