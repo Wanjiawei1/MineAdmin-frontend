@@ -6,9 +6,8 @@ import { changeStatus, deleteByIds } from '@/modules/goods/api/goods'
 import { useMessage } from '@/hooks/useMessage.ts'
 import { ResultCode } from '@/utils/ResultCode.ts'
 
-const msg = useMessage()
-
 function getTableColumns(maDialog: UseDialogExpose, formRef: Ref, t: TransType['globalTrans']): MaProTableColumn[] {
+  const msg = useMessage()
   const tableColumns: MaProTableColumn[] = [
     {
       label: '商品名称',
