@@ -12,6 +12,18 @@ const testData = ref([
 const options = ref({
   requestOptions: {
     api: page,
+    beforeRequest: (params) => {
+      console.log('📤 发起API请求，参数:', params)
+      return params
+    },
+    afterRequest: (res) => {
+      console.log('📥 API响应成功:', res)
+      console.log('📊 数据列表:', res.data?.list)
+      return res
+    },
+    onError: (error) => {
+      console.error('❌ API请求失败:', error)
+    },
   },
 })
 
