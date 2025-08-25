@@ -42,9 +42,10 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any = 
     {
       label: '上架状态',
       prop: 'status',
-      render: 'radio-group',
+      render: 'select',
       cols: { md: 12, xs: 24 },
       renderProps: {
+        placeholder: '请选择上架状态',
         options: [
           { label: '已上架', value: 1 },
           { label: '未上架', value: 2 },
