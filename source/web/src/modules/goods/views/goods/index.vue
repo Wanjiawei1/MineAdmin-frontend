@@ -1,167 +1,48 @@
 <script setup lang="tsx">
-import type { MaProTableExpose, MaProTableOptions, MaProTableSchema } from '@mineadmin/pro-table'
-import type { Ref } from 'vue'
-import type { TransType } from '@/hooks/auto-imports/useTrans.ts'
-import type { UseDialogExpose } from '@/hooks/useDialog.ts'
-
-// 导入API
-import { page, deleteByIds } from '@/modules/goods/api/goods'
-import getSearchItems from './data/getSearchItems.tsx'
-import getTableColumns from './data/getTableColumns.tsx'
-import useDialog from '@/hooks/useDialog.ts'
-import { useMessage } from '@/hooks/useMessage.ts'
-import { ResultCode } from '@/utils/ResultCode.ts'
-
-import GoodsForm from './form.vue'
+import { ref } from 'vue'
 
 defineOptions({ name: 'goods:goods' })
 
-const proTableRef = ref<MaProTableExpose>() as Ref<MaProTableExpose>
-const formRef = ref()
-const selections = ref<any[]>([])
-const i18n = useTrans() as TransType
-const t = i18n.globalTrans
-const msg = useMessage()
+// 模拟数据
+const tableData = ref([
+  {
+    id: 1,
+    name: 'edfaed',
+    price: '111.00',
+    status: 1,
+    created_at: '2025-08-25 02:01:06'
+  }
+])
 
-// 弹窗配置
-const maDialog: UseDialogExpose = useDialog({
-  lgWidth: '750px',
-  // 保存数据
-  ok: ({ formType }, okLoadingState: (state: boolean) => void) => {
-    okLoadingState(true)
-    const elForm = formRef.value.maForm.getElFormRef()
-    // 验证通过后
-    elForm.validate().then(() => {
-      switch (formType) {
-        // 新增
-        case 'add':
-          formRef.value.add().then((res: any) => {
-            res.code === ResultCode.SUCCESS ? msg.success(t('crud.createSuccess')) : msg.error(res.message)
-            maDialog.close()
-            proTableRef.value.refresh()
-          }).catch((err: any) => {
-            msg.alertError(err)
-          })
-          break
-        // 修改
-        case 'edit':
-          formRef.value.edit().then((res: any) => {
-            res.code === 200 ? msg.success(t('crud.updateSuccess')) : msg.error(res.message)
-            maDialog.close()
-            proTableRef.value.refresh()
-          }).catch((err: any) => {
-            msg.alertError(err)
-          })
-          break
-      }
-    }).catch()
-    okLoadingState(false)
-  },
-})
-
-// 参数配置
-const options = ref<MaProTableOptions>({
-  // 表格距离底部的像素偏移适配
-  adaptionOffsetBottom: 161,
-  header: {
-    mainTitle: () => '商品管理', // 修改标题
-    subTitle: () => '管理所有商品信息', // 修改副标题
-  },
-  // 表格参数
-  tableOptions: {
-    on: {
-      // 表格选择事件
-      onSelectionChange: (selection: any[]) => selections.value = selection,
-    },
-  },
-  // 搜索参数
-  searchOptions: {
-    fold: true,
-    text: {
-      searchBtn: () => t('crud.search'),
-      resetBtn: () => t('crud.reset'),
-      isFoldBtn: () => t('crud.searchFold'),
-      notFoldBtn: () => t('crud.searchUnFold'),
-    },
-  },
-  // 搜索表单参数
-  searchFormOptions: { labelWidth: '90px' },
-  // 请求配置
-  requestOptions: {
-    api: page,
-  },
-})
-// 架构配置
-const schema = ref<MaProTableSchema>({
-  // 搜索项
-  searchItems: getSearchItems(t),
-  // 表格列
-  tableColumns: getTableColumns(maDialog, formRef, t),
-})
-
-// 批量删除
-function handleDelete() {
-  const ids = selections.value.map((item: any) => item.id)
-  msg.confirm(t('crud.delMessage')).then(async () => {
-    const response = await deleteByIds(ids) // 解除此处的注释
-    if (response.code === ResultCode.SUCCESS) {
-      msg.success(t('crud.delSuccess'))
-      await proTableRef.value.refresh()
-    }
-  })
-}
+console.log('测试页面加载，数据:', tableData.value)
 </script>
 
 <template>
   <div class="mine-layout pt-3">
-    <MaProTable ref="proTableRef" :options="options" :schema="schema">
-      <template #actions>
-        <el-button
-          v-auth="['goods:goods:save']"
-          type="primary"
-          @click="() => {
-            maDialog.setTitle(t('crud.add'))
-            maDialog.open({ formType: 'add' })
-          }"
-        >
-          {{ t('crud.add') }}
-        </el-button>
-      </template>
+    <h2>商品管理测试页面</h2>
+    
+    <div style="margin: 20px 0;">
+      <h3>调试信息：</h3>
+      <p>数据加载状态：已加载</p>
+      <p>数据条数：{{ tableData.length }}</p>
+    </div>
 
-      <template #toolbarLeft>
-        <el-button
-          v-auth="['goods:goods:delete']"
-          type="danger"
-          plain
-          :disabled="selections.length < 1"
-          @click="handleDelete"
-        >
-          {{ t('crud.delete') }}
-        </el-button>
-      </template>
-      <!-- 数据为空时 -->
-      <template #empty>
-        <el-empty>
-          <el-button
-            v-auth="['goods:goods:save']"
-            type="primary"
-            @click="() => {
-              maDialog.setTitle(t('crud.add'))
-              maDialog.open({ formType: 'add' })
-            }"
-          >
-            {{ t('crud.add') }}
-          </el-button>
-        </el-empty>
-      </template>
-    </MaProTable>
+    <!-- 简单的表格 -->
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="80" />
+      <el-table-column prop="name" label="商品名称" />
+      <el-table-column prop="price" label="价格" />
+      <el-table-column prop="status" label="状态">
+        <template #default="{ row }">
+          {{ row.status === 1 ? '已上架' : '未上架' }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="created_at" label="创建时间" />
+    </el-table>
 
-    <component :is="maDialog.Dialog">
-      <template #default="{ formType, data }">
-        <!-- 新增、编辑表单 -->
-        <GoodsForm ref="formRef" :form-type="formType" :data="data" />
-      </template>
-    </component>
+    <div style="margin-top: 20px;">
+      <el-button type="primary">新增商品（测试）</el-button>
+    </div>
   </div>
 </template>
 
