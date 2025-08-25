@@ -3,9 +3,10 @@
 import { ref } from 'vue'
 import type { GoodsRecord } from '@/modules/goods/api/goods'
 import { add, edit } from '@/modules/goods/api/goods'
-import type { MaFormExpose, MaFormItem } from '@mineadmin/form'
+import type { MaFormExpose } from '@mineadmin/form'
 import useForm from '@/hooks/useForm.ts'
 import { ResultCode } from '@/utils/ResultCode.ts'
+import getFormItems from './data/getFormItems.tsx'
 
 defineOptions({ name: 'goods:goods:form' })
 
@@ -16,53 +17,6 @@ const props = defineProps<{
 
 const goodsForm = ref<MaFormExpose>()
 const goodsModel = ref<Partial<GoodsRecord>>({})
-
-// 定义表单列 (返回一个包含 formItems 的对象)
-function getFormItems(): { formItems: MaFormItem[] } {
-  return {
-    formItems: [
-      {
-        formType: 'grid',
-        columns: [
-          {
-            span: 24,
-            formItems: [
-              {
-                label: '商品名称',
-                dataIndex: 'name',
-                formType: 'input',
-                rules: [{ required: true, message: '商品名称不能为空' }],
-              },
-              {
-                label: '商品图片',
-                dataIndex: 'image',
-                formType: 'upload',
-                rules: [{ required: true, message: '请上传商品图片' }],
-              },
-              {
-                label: '商品价格',
-                dataIndex: 'price',
-                formType: 'input-number',
-                rules: [{ required: true, message: '商品价格不能为空' }],
-              },
-              {
-                label: '上架状态',
-                dataIndex: 'status',
-                formType: 'radio-group',
-                initialValue: 1, // 默认值为 "上架"
-                rules: [{ required: true, message: '请选择上架状态' }],
-                options: [
-                  { label: '上架', value: 1 },
-                  { label: '下架', value: 2 },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  }
-}
 
 // 使用 useForm 钩子初始化表单
 useForm('goodsForm').then((form: MaFormExpose) => {
