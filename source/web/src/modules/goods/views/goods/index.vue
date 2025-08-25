@@ -52,6 +52,12 @@ const maDialog = useDialog({
 const options = ref<MaProTableOptions>({
   requestOptions: {
     api: page,
+    afterRequest: (res: any) => {
+      console.log('🔍 API响应数据:', res)
+      console.log('🔍 数据列表:', res.data?.list)
+      console.log('🔍 数据总数:', res.data?.total)
+      return res
+    },
   },
 })
 
