@@ -1,48 +1,62 @@
 <script setup lang="tsx">
 import { ref } from 'vue'
+import type { MaProTableOptions, MaProTableSchema } from '@mineadmin/pro-table'
 
 defineOptions({ name: 'goods:goods' })
 
-// 模拟数据
-const tableData = ref([
-  {
-    id: 1,
-    name: 'edfaed',
-    price: '111.00',
-    status: 1,
-    created_at: '2025-08-25 02:01:06'
-  }
-])
+// 模拟数据API
+function mockAPI() {
+  return Promise.resolve({
+    code: 200,
+    message: "成功",
+    data: {
+      list: [
+        {
+          id: 1,
+          name: 'edfaed',
+          price: '111.00',
+          status: 1,
+          created_at: '2025-08-25 02:01:06'
+        }
+      ],
+      total: 1
+    }
+  })
+}
 
-console.log('测试页面加载，数据:', tableData.value)
+// 最简单的 MaProTable 配置
+const options = ref<MaProTableOptions>({
+  requestOptions: {
+    api: mockAPI,
+  },
+})
+
+const schema = ref<MaProTableSchema>({
+  tableColumns: [
+    {
+      label: '商品名称',
+      dataIndex: 'name',
+    },
+    {
+      label: '商品价格',
+      dataIndex: 'price',
+    }
+  ],
+})
+
+console.log('MaProTable 配置加载完成')
 </script>
 
 <template>
   <div class="mine-layout pt-3">
-    <h2>商品管理测试页面</h2>
+    <h2>商品管理 - MaProTable 测试</h2>
     
     <div style="margin: 20px 0;">
-      <h3>调试信息：</h3>
-      <p>数据加载状态：已加载</p>
-      <p>数据条数：{{ tableData.length }}</p>
+      <p>使用最简单的 MaProTable 配置，只有商品名称和价格两列</p>
     </div>
 
-    <!-- 简单的表格 -->
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="id" label="ID" width="80" />
-      <el-table-column prop="name" label="商品名称" />
-      <el-table-column prop="price" label="价格" />
-      <el-table-column prop="status" label="状态">
-        <template #default="{ row }">
-          {{ row.status === 1 ? '已上架' : '未上架' }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="created_at" label="创建时间" />
-    </el-table>
-
-    <div style="margin-top: 20px;">
-      <el-button type="primary">新增商品（测试）</el-button>
-    </div>
+    <!-- 使用 MaProTable -->
+    <MaProTable :options="options" :schema="schema" />
   </div>
 </template>
 
