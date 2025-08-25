@@ -14,37 +14,15 @@ function getTableColumns(maDialog: UseDialogExpose, formRef: Ref, t: TransType['
       dataIndex: 'name',
     },
     {
-      label: '商品图片',
-      dataIndex: 'image',
-    },
-    {
       label: '商品价格',
       dataIndex: 'price',
     },
     {
       label: '上架状态',
       dataIndex: 'status',
-      formType: 'dict-switch',
-      dict: {
-        // 与后端的约定需要保持一致
-        data: [
-          { label: '已上架', value: 1 },
-          { label: '未上架', value: 2 },
-        ],
-        props: {
-          label: 'label',
-          value: 'value',
-        },
+      render: ({ record }) => {
+        return record.status === 1 ? '已上架' : '未上架'
       },
-      change: async (val: any, record: any) => {
-        const response = await changeStatus(record.id, val)
-        if (response.code === ResultCode.SUCCESS)
-          msg.success(t('crud.updateSuccess'))
-      },
-    },
-    {
-      label: '创建时间',
-      dataIndex: 'created_at',
     },
     {
       label: '操作',
@@ -55,7 +33,6 @@ function getTableColumns(maDialog: UseDialogExpose, formRef: Ref, t: TransType['
           text: t('crud.edit'),
           type: 'primary',
           link: true,
-          auth: ['goods:goods:update'],
           onClick: ({ record }) => {
             maDialog.setTitle(t('crud.edit'))
             maDialog.open({ formType: 'edit', data: record })
@@ -65,11 +42,13 @@ function getTableColumns(maDialog: UseDialogExpose, formRef: Ref, t: TransType['
           text: t('crud.delete'),
           type: 'danger',
           link: true,
-          auth: ['goods:goods:delete'],
           onClick: async ({ record }) => {
             const response = await deleteByIds([record.id])
-            if (response.code === ResultCode.SUCCESS)
+            if (response.code === ResultCode.SUCCESS) {
               msg.success(t('crud.delSuccess'))
+              // 刷新表格
+              window.location.reload()
+            }
           },
         },
       ],

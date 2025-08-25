@@ -88,14 +88,7 @@ const options = ref<MaProTableOptions>({
   searchFormOptions: { labelWidth: '90px' },
   // 请求配置
   requestOptions: {
-    api: page, // 解除此处的注释
-    afterRequest: (res: any) => {
-      console.log('API返回数据:', res)
-      console.log('数据列表:', res.data?.list)
-      return res
-    },
-    dataPath: 'data.list', // 指定数据路径
-    totalPath: 'data.total', // 指定总数路径
+    api: page,
   },
 })
 // 架构配置
