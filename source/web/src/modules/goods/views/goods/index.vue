@@ -1,41 +1,52 @@
+<!--
+从用户管理页面完全复制过来，只修改API和数据字段
+-->
 <script setup lang="tsx">
-import { ref } from 'vue'
 import type { MaProTableExpose, MaProTableOptions, MaProTableSchema } from '@mineadmin/pro-table'
 import type { Ref } from 'vue'
-import { page, deleteByIds } from '@/modules/goods/api/goods'
+import type { TransType } from '@/hooks/auto-imports/useTrans.ts'
+import type { UseDialogExpose } from '@/hooks/useDialog.ts'
+
+import { deleteByIds, page } from '@/modules/goods/api/goods'
 import useDialog from '@/hooks/useDialog.ts'
 import { useMessage } from '@/hooks/useMessage.ts'
 import { ResultCode } from '@/utils/ResultCode.ts'
+
 import GoodsForm from './form.vue'
 
 defineOptions({ name: 'goods:goods' })
 
 const proTableRef = ref<MaProTableExpose>() as Ref<MaProTableExpose>
 const formRef = ref()
-const msg = useMessage()
-const i18n = useTrans()
+const selections = ref<any[]>([])
+const i18n = useTrans() as TransType
 const t = i18n.globalTrans
+const msg = useMessage()
 
-// 弹窗配置
-const maDialog = useDialog({
+// 弹窗配置（完全复制用户管理的）
+const maDialog: UseDialogExpose = useDialog({
   lgWidth: '750px',
+  // 保存数据
   ok: ({ formType }, okLoadingState: (state: boolean) => void) => {
     okLoadingState(true)
     const elForm = formRef.value.maForm.getElFormRef()
+    // 验证通过后
     elForm.validate().then(() => {
       switch (formType) {
+        // 新增
         case 'add':
           formRef.value.add().then((res: any) => {
-            res.code === ResultCode.SUCCESS ? msg.success('创建成功') : msg.error(res.message)
+            res.code === ResultCode.SUCCESS ? msg.success(t('crud.createSuccess')) : msg.error(res.message)
             maDialog.close()
             proTableRef.value.refresh()
           }).catch((err: any) => {
             msg.alertError(err)
           })
           break
+        // 修改
         case 'edit':
           formRef.value.edit().then((res: any) => {
-            res.code === 200 ? msg.success('更新成功') : msg.error(res.message)
+            res.code === 200 ? msg.success(t('crud.updateSuccess')) : msg.error(res.message)
             maDialog.close()
             proTableRef.value.refresh()
           }).catch((err: any) => {
@@ -48,7 +59,7 @@ const maDialog = useDialog({
   },
 })
 
-// MaProTable 配置
+// 参数配置（完全复制用户管理的）
 const options = ref<MaProTableOptions>({
   // 表格距离底部的像素偏移适配
   adaptionOffsetBottom: 161,
@@ -56,14 +67,21 @@ const options = ref<MaProTableOptions>({
     mainTitle: () => '商品管理',
     subTitle: () => '管理所有商品信息',
   },
+  // 表格参数
+  tableOptions: {
+    on: {
+      // 表格选择事件
+      onSelectionChange: (selection: any[]) => selections.value = selection,
+    },
+  },
   // 搜索参数
   searchOptions: {
     fold: true,
     text: {
-      searchBtn: () => '搜索',
-      resetBtn: () => '重置',
-      isFoldBtn: () => '展开',
-      notFoldBtn: () => '收起',
+      searchBtn: () => t('crud.search'),
+      resetBtn: () => t('crud.reset'),
+      isFoldBtn: () => t('crud.searchFold'),
+      notFoldBtn: () => t('crud.searchUnFold'),
     },
   },
   // 搜索表单参数
@@ -71,19 +89,14 @@ const options = ref<MaProTableOptions>({
   // 请求配置
   requestOptions: {
     api: page,
-    afterRequest: (res: any) => {
-      console.log('🔍 API响应数据:', res)
-      console.log('🔍 数据列表:', res.data?.list)
-      console.log('🔍 数据总数:', res.data?.total)
-      return res
-    },
   },
 })
 
+// 简化的表格列配置
 const schema = ref<MaProTableSchema>({
-  // 搜索项
+  // 搜索项（暂时为空）
   searchItems: [],
-  // 表格列
+  // 表格列（只保留基本字段）
   tableColumns: [
     {
       label: 'ID',
@@ -101,82 +114,74 @@ const schema = ref<MaProTableSchema>({
     {
       label: '状态',
       dataIndex: 'status',
-      render: ({ record }) => {
-        return record.status === 1 ? '已上架' : '未上架'
-      },
     },
     {
-      label: '操作',
-      dataIndex: 'operation',
-      width: 150,
-      buttons: [
-        {
-          text: '编辑',
-          type: 'primary',
-          link: true,
-          onClick: ({ record }) => {
-            maDialog.setTitle('编辑商品')
-            maDialog.open({ formType: 'edit', data: record })
-          },
-        },
-        {
-          text: '删除',
-          type: 'danger',
-          link: true,
-          onClick: async ({ record }) => {
-            const response = await deleteByIds([record.id])
-            if (response.code === ResultCode.SUCCESS) {
-              msg.success('删除成功')
-              proTableRef.value.refresh()
-            }
-          },
-        },
-      ],
+      label: '创建时间',
+      dataIndex: 'created_at',
     },
   ],
 })
 
-// 手动测试API
-async function testAPI() {
-  console.log('🧪 开始手动测试API...')
-  try {
-    const result = await page({ page: 1, page_size: 10 })
-    console.log('✅ API调用成功:', result)
-  } catch (error) {
-    console.error('❌ API调用失败:', error)
-  }
+// 批量删除（完全复制用户管理的）
+function handleDelete() {
+  const ids = selections.value.map((item: any) => item.id)
+  msg.confirm(t('crud.delMessage')).then(async () => {
+    const response = await deleteByIds(ids)
+    if (response.code === ResultCode.SUCCESS) {
+      msg.success(t('crud.delSuccess'))
+      await proTableRef.value.refresh()
+    }
+  })
 }
-
-console.log('MaProTable 配置加载完成，包含完整功能')
-console.log('📝 page API函数:', page)
 </script>
 
 <template>
   <div class="mine-layout pt-3">
-    <div style="margin-bottom: 20px;">
-      <h3>调试信息</h3>
-      <p>页面状态: 已加载</p>
-      <p>API函数: {{ typeof page }}</p>
-      <el-button @click="testAPI" type="info">手动测试API</el-button>
-    </div>
-
     <MaProTable ref="proTableRef" :options="options" :schema="schema">
       <template #actions>
         <el-button
+          v-auth="['goods:goods:save']"
           type="primary"
           @click="() => {
-            maDialog.setTitle('新增商品')
+            maDialog.setTitle(t('crud.add'))
             maDialog.open({ formType: 'add' })
           }"
         >
-          新增商品
+          {{ t('crud.add') }}
         </el-button>
+      </template>
+
+      <template #toolbarLeft>
+        <el-button
+          v-auth="['goods:goods:delete']"
+          type="danger"
+          plain
+          :disabled="selections.length < 1"
+          @click="handleDelete"
+        >
+          {{ t('crud.delete') }}
+        </el-button>
+      </template>
+      <!-- 数据为空时 -->
+      <template #empty>
+        <el-empty>
+          <el-button
+            v-auth="['goods:goods:save']"
+            type="primary"
+            @click="() => {
+              maDialog.setTitle(t('crud.add'))
+              maDialog.open({ formType: 'add' })
+            }"
+          >
+            {{ t('crud.add') }}
+          </el-button>
+        </el-empty>
       </template>
     </MaProTable>
 
-    <!-- 弹窗表单 -->
     <component :is="maDialog.Dialog">
       <template #default="{ formType, data }">
+        <!-- 新增、编辑表单 -->
         <GoodsForm ref="formRef" :form-type="formType" :data="data" />
       </template>
     </component>
