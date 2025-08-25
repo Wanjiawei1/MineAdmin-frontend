@@ -6,7 +6,7 @@
  *
  * @Author X.Mo<root@imoi.cn>
  * @Link   https://github.com/mineadmin
-
+ */
 import type { RouteRecordRaw } from 'vue-router'
 
 const dashboardRoute: RouteRecordRaw = {
