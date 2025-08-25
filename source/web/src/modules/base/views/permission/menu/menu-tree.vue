@@ -76,14 +76,14 @@ onMounted(async () => {
       <div class="mine-tree-node">
         <div class="label">
           <ma-svg-icon v-if="data.meta?.icon" :name="data.meta?.icon" :size="20" />
-          {{ data.meta?.i18n ? t(data.meta?.i18n) : data.meta.title ?? 'unknown' }}
+          {{ data.meta?.i18n ? t(data.meta?.i18n) : (data.meta?.title || data.name || 'unknown') }}
         </div>
         <div class="do" :class="{ '!inline-block': maTreeRef.elTree.getCurrentKey() === data.id }">
-          <el-tag :type="menuType[data.meta?.type].color as any" class="mr-2">
-            {{ menuType[data.meta?.type].label }}
+          <el-tag :type="menuType[data.meta?.type || data.type || 'M']?.color as any" class="mr-2">
+            {{ menuType[data.meta?.type || data.type || 'M']?.label }}
           </el-tag>
           <el-button
-            v-if="data.meta?.type === 'M'"
+            v-if="(data.meta?.type || data.type) === 'M'"
             v-auth="['permission:menu:save']"
             size="small" circle type="primary"
             @click.stop="addMenu(data)"
