@@ -17,7 +17,7 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any = 
     {
       label: '商品价格',
       prop: 'price',
-      render: 'input-number',
+      render: 'input',
       cols: { md: 12, xs: 24 },
       renderProps: {
         placeholder: '请输入商品价格',
