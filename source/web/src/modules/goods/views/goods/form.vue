@@ -33,7 +33,7 @@ function getFormItems(): { formItems: MaFormItem[] } {
                 formType: 'input',
                 rules: [{ required: true, message: '商品名称不能为空' }],
               },
-              {
+              /* {
                 label: '商品图片',
                 dataIndex: 'image',
                 formType: 'upload',
@@ -44,7 +44,7 @@ function getFormItems(): { formItems: MaFormItem[] } {
                 dataIndex: 'price',
                 formType: 'input-number',
                 rules: [{ required: true, message: '商品价格不能为空' }],
-              },
+              }, */
               {
                 label: '上架状态',
                 dataIndex: 'status',
