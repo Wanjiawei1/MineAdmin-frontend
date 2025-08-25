@@ -10,6 +10,24 @@ const testData = ref([
   { id: 1, name: 'edfaed', price: '111.00', status: 1 }
 ])
 
+// 创建一个响应式的数据，用于验证数据绑定
+const staticData = ref([
+  {
+    id: 1,
+    name: 'edfaed',
+    price: '111.00',
+    status: 1,
+    created_at: '2025-08-25 02:01:06'
+  },
+  {
+    id: 2, 
+    name: '测试商品2',
+    price: '299.99',
+    status: 2,
+    created_at: '2025-08-25 03:15:22'
+  }
+])
+
 // 添加表格引用
 const proTableRef = ref<MaProTableExpose>() as Ref<MaProTableExpose>
 
@@ -164,6 +182,22 @@ setTimeout(async () => {
     <div style="margin: 20px 0;">
       <h2>MaProTable 测试</h2>
       <MaProTable ref="proTableRef" :options="options" :schema="schema" />
+    </div>
+
+    <div style="margin: 20px 0; border: 2px solid green; padding: 20px;">
+      <h2>原生 Element Plus 表格测试（相同数据）</h2>
+      <el-table :data="staticData" style="width: 100%">
+        <el-table-column prop="id" label="ID" width="80" />
+        <el-table-column prop="name" label="商品名称" />
+        <el-table-column prop="price" label="商品价格" />
+        <el-table-column prop="status" label="状态">
+          <template #default="{ row }">
+            {{ row.status === 1 ? '已上架' : '未上架' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="created_at" label="创建时间" />
+      </el-table>
+      <p style="margin-top: 10px;">如果这个表格能显示数据，说明数据本身没问题，问题出在MaProTable上。</p>
     </div>
 
     <div style="margin: 20px 0;">
