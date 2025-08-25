@@ -89,6 +89,10 @@ const options = ref<MaProTableOptions>({
   // 请求配置
   requestOptions: {
     api: page, // 解除此处的注释
+    afterRequest: (res: any) => {
+      console.log('API返回数据:', res)
+      return res
+    },
   },
 })
 // 架构配置
