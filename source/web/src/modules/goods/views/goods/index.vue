@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { page } from '@/modules/goods/api/goods'
 
 console.log('🔥 商品管理页面开始加载...')
 
@@ -7,7 +8,28 @@ const testData = ref([
   { id: 1, name: 'edfaed', price: '111.00', status: 1 }
 ])
 
+// 最简单的 MaProTable 配置
+const options = ref({
+  requestOptions: {
+    api: page,
+  },
+})
+
+const schema = ref({
+  tableColumns: [
+    {
+      label: '商品名称',
+      dataIndex: 'name',
+    },
+    {
+      label: '商品价格', 
+      dataIndex: 'price',
+    }
+  ],
+})
+
 console.log('🔥 组件数据准备完成:', testData.value)
+console.log('🔥 MaProTable配置已准备:', { options: options.value, schema: schema.value })
 </script>
 
 <template>
@@ -28,6 +50,11 @@ console.log('🔥 组件数据准备完成:', testData.value)
           ID: {{ item.id }}, 名称: {{ item.name }}, 价格: {{ item.price }}
         </li>
       </ul>
+    </div>
+
+    <div style="margin: 20px 0;">
+      <h2>MaProTable 测试</h2>
+      <MaProTable :options="options" :schema="schema" />
     </div>
 
     <div style="margin: 20px 0;">
