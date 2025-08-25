@@ -7,6 +7,8 @@ import type { MaFormExpose, MaFormItem } from '@mineadmin/form'
 import useForm from '@/hooks/useForm.ts'
 import { ResultCode } from '@/utils/ResultCode.ts'
 
+console.log('--- [Goods Form]：组件 setup 开始 ---')
+
 defineOptions({ name: 'goods:goods:form' })
 
 const props = defineProps<{
@@ -19,6 +21,7 @@ const goodsModel = ref<Partial<GoodsRecord>>({})
 
 // 定义表单列 (返回一个包含 formItems 的对象)
 function getFormItems(): { formItems: MaFormItem[] } {
+  console.log('--- [Goods Form]：getFormItems() 函数被调用 ---')
   return {
     formItems: [
       {
@@ -66,11 +69,14 @@ function getFormItems(): { formItems: MaFormItem[] } {
 
 // 使用 useForm 钩子初始化表单
 useForm('goodsForm').then((form: MaFormExpose) => {
+  console.log('--- [Goods Form]：useForm 的 .then() 回调已执行 ---')
   if (props.formType === 'edit' && props.data) {
     Object.assign(goodsModel.value, props.data)
   }
+  const items = getFormItems().formItems
+  console.log('--- [Goods Form]：准备设置的表单项(items):', items)
   // 正确地传入 getFormItems() 返回对象中的 formItems 数组
-  form.setItems(getFormItems().formItems)
+  form.setItems(items)
   form.setOptions({
     labelWidth: '80px',
   })
