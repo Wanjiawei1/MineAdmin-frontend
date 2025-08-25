@@ -16,7 +16,6 @@ function getTableColumns(maDialog: UseDialogExpose, formRef: Ref, t: TransType['
     {
       label: '商品图片',
       dataIndex: 'image',
-      formType: 'upload',
     },
     {
       label: '商品价格',
