@@ -114,11 +114,30 @@ const schema = ref<MaProTableSchema>({
   ],
 })
 
+// 手动测试API
+async function testAPI() {
+  console.log('🧪 开始手动测试API...')
+  try {
+    const result = await page({ page: 1, page_size: 10 })
+    console.log('✅ API调用成功:', result)
+  } catch (error) {
+    console.error('❌ API调用失败:', error)
+  }
+}
+
 console.log('MaProTable 配置加载完成，包含完整功能')
+console.log('📝 page API函数:', page)
 </script>
 
 <template>
   <div class="mine-layout pt-3">
+    <div style="margin-bottom: 20px;">
+      <h3>调试信息</h3>
+      <p>页面状态: 已加载</p>
+      <p>API函数: {{ typeof page }}</p>
+      <el-button @click="testAPI" type="info">手动测试API</el-button>
+    </div>
+
     <MaProTable ref="proTableRef" :options="options" :schema="schema">
       <template #actions>
         <el-button
