@@ -20,11 +20,11 @@ export function getById(id: number) {
 }
 
 export function add(data: GoodsRecord) {
-  return request.http.post(`${prefix}/add`, { data })
+  return request.http.post(`${prefix}/add`, data)
 }
 
 export function edit(data: GoodsRecord) {
-  return request.http.put(`${prefix}/edit`, { data })
+  return request.http.put(`${prefix}/edit`, data)
 }
 
 export function deleteByIds(ids: number[]) {

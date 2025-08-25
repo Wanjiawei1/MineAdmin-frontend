@@ -33,9 +33,11 @@ useForm('goodsForm').then((form: MaFormExpose) => {
 // 创建操作
 function addRequest(): Promise<any> {
   return new Promise((resolve, reject) => {
+    console.log('准备提交的表单数据:', goodsModel.value)
     add(goodsModel.value as GoodsRecord).then((res: any) => {
       res.code === ResultCode.SUCCESS ? resolve(res) : reject(res)
     }).catch((err) => {
+      console.error('提交失败:', err)
       reject(err)
     })
   })
