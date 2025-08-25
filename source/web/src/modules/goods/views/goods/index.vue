@@ -1,5 +1,6 @@
-<script setup>
+<script setup lang="tsx">
 import { ref } from 'vue'
+import type { MaProTableOptions, MaProTableSchema } from '@mineadmin/pro-table'
 import { page } from '@/modules/goods/api/goods'
 
 console.log('🔥 商品管理页面开始加载...')
@@ -8,26 +9,26 @@ const testData = ref([
   { id: 1, name: 'edfaed', price: '111.00', status: 1 }
 ])
 
-// 最简单的 MaProTable 配置
-const options = ref({
+// 正确的 MaProTable 配置（添加类型定义）
+const options = ref<MaProTableOptions>({
   requestOptions: {
     api: page,
-    beforeRequest: (params) => {
+    beforeRequest: (params: any) => {
       console.log('📤 发起API请求，参数:', params)
       return params
     },
-    afterRequest: (res) => {
+    afterRequest: (res: any) => {
       console.log('📥 API响应成功:', res)
       console.log('📊 数据列表:', res.data?.list)
       return res
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('❌ API请求失败:', error)
     },
   },
 })
 
-const schema = ref({
+const schema = ref<MaProTableSchema>({
   tableColumns: [
     {
       label: '商品名称',
@@ -42,6 +43,17 @@ const schema = ref({
 
 console.log('🔥 组件数据准备完成:', testData.value)
 console.log('🔥 MaProTable配置已准备:', { options: options.value, schema: schema.value })
+
+// 手动测试API（确保API本身工作正常）
+setTimeout(async () => {
+  try {
+    console.log('🧪 手动测试API...')
+    const result = await page({ page: 1, page_size: 10 })
+    console.log('✅ 手动API测试成功:', result)
+  } catch (error) {
+    console.error('❌ 手动API测试失败:', error)
+  }
+}, 2000)
 </script>
 
 <template>
