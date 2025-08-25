@@ -133,7 +133,7 @@ const useUserStore = defineStore(
         await refreshMenu()
         await refreshRole()
         await routeStore.initRoutes(router, getMenu())
-        const codes: string[] = recursionGetKey(getMenu(), 'name')
+        const codes: string[] = recursionGetKey(getMenu(), 'code')
         getRoles().includes('SuperAdmin') && codes.unshift('*')
         setPermissions(codes)
         await usePluginStore().callHooks('getUserInfo', data)
