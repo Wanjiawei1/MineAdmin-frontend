@@ -6,7 +6,7 @@
  *
  * @Author X.Mo<root@imoi.cn>
  * @Link   https://github.com/mineadmin
- */
+
 import type { RouteRecordRaw } from 'vue-router'
 
 const dashboardRoute: RouteRecordRaw = {
@@ -31,7 +31,7 @@ const dashboardRoute: RouteRecordRaw = {
         copyright: true,
         cache: true,
       },
-      component: () => import(('~/base/views/dashboard/workbench.vue')),
+      component: () => import('@/modules/base/views/dashboard/workbench.vue'),
     },
     {
       name: 'dashboard:analysis',
@@ -45,7 +45,7 @@ const dashboardRoute: RouteRecordRaw = {
         copyright: true,
         cache: true,
       },
-      component: () => import(('~/base/views/dashboard/analysis.vue')),
+      component: () => import('@/modules/base/views/dashboard/analysis.vue'),
     },
     {
       name: 'dashboard:report',
@@ -59,7 +59,7 @@ const dashboardRoute: RouteRecordRaw = {
         copyright: true,
         cache: true,
       },
-      component: () => import(('~/base/views/dashboard/report.vue')),
+      component: () => import('@/modules/base/views/dashboard/report.vue'),
     },
   ],
 }
