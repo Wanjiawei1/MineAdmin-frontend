@@ -17,7 +17,7 @@ const welcomeRoute: RouteRecordRaw = {
     i18n: 'menu.welcome',
     icon: 'icon-park-outline:jewelry',
   },
-  component: () => import('@/modules/base/views/welcome/index.vue'),
+  component: () => import('~/base/views/welcome/index.vue'),
 }
 
 export default welcomeRoute
