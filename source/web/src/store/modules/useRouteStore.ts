@@ -147,7 +147,7 @@ const useRouteStore = defineStore(
         // 2. 动态加载组件
         let component: any | null = null
         if (item.component) {
-          const componentPath = `../../modules/${item.component}`
+          const componentPath = `../../modules/${item.component}.vue`
           if (moduleViews[componentPath]) {
             component = moduleViews[componentPath]
           } else {
@@ -156,7 +156,7 @@ const useRouteStore = defineStore(
             if (moduleViews[tsxPath]) {
               component = moduleViews[tsxPath]
             } else {
-              console.warn(`组件未找到: ${componentPath}`)
+              console.warn(`组件未找到: ${componentPath} 或 ${tsxPath}`)
             }
           }
         }
