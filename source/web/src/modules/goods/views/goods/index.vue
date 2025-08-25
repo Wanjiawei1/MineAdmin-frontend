@@ -40,11 +40,11 @@ const options = ref<MaProTableOptions>({
   },
   // 搜索表单参数
   searchFormOptions: { labelWidth: '90px' },
-  // 请求配置 - 使用静态数据测试
+  // 请求配置 - 添加数据路径配置
   requestOptions: {
     api: () => {
       console.log('🎯 使用静态数据API')
-      return Promise.resolve({
+      const result = {
         code: 200,
         message: '成功',
         data: {
@@ -66,8 +66,13 @@ const options = ref<MaProTableOptions>({
           ],
           total: 2
         }
-      })
+      }
+      console.log('🎯 API返回数据:', result)
+      return Promise.resolve(result)
     },
+    // 指定数据路径
+    dataPath: 'data.list',
+    totalPath: 'data.total', 
     beforeRequest: (params: any) => {
       console.log('📤 发起API请求，参数:', params)
       return params
