@@ -9,8 +9,34 @@ const testData = ref([
   { id: 1, name: 'edfaed', price: '111.00', status: 1 }
 ])
 
-// 正确的 MaProTable 配置（添加类型定义）
+// 完整的 MaProTable 配置（参考用户管理页面）
 const options = ref<MaProTableOptions>({
+  // 表格距离底部的像素偏移适配
+  adaptionOffsetBottom: 161,
+  header: {
+    mainTitle: () => '商品管理',
+    subTitle: () => '管理所有商品信息',
+  },
+  // 表格参数
+  tableOptions: {
+    on: {
+      // 表格选择事件
+      onSelectionChange: (selection: any[]) => console.log('选择变化:', selection),
+    },
+  },
+  // 搜索参数
+  searchOptions: {
+    fold: true,
+    text: {
+      searchBtn: () => '搜索',
+      resetBtn: () => '重置',
+      isFoldBtn: () => '展开',
+      notFoldBtn: () => '收起',
+    },
+  },
+  // 搜索表单参数
+  searchFormOptions: { labelWidth: '90px' },
+  // 请求配置
   requestOptions: {
     api: page,
     beforeRequest: (params: any) => {
@@ -29,7 +55,15 @@ const options = ref<MaProTableOptions>({
 })
 
 const schema = ref<MaProTableSchema>({
+  // 搜索项（空数组，但必须有）
+  searchItems: [],
+  // 表格列
   tableColumns: [
+    {
+      label: 'ID',
+      dataIndex: 'id',
+      width: 80,
+    },
     {
       label: '商品名称',
       dataIndex: 'name',
@@ -37,6 +71,14 @@ const schema = ref<MaProTableSchema>({
     {
       label: '商品价格', 
       dataIndex: 'price',
+    },
+    {
+      label: '状态',
+      dataIndex: 'status',
+    },
+    {
+      label: '创建时间',
+      dataIndex: 'created_at',
     }
   ],
 })
