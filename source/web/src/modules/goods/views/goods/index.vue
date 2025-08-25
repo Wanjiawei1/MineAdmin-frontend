@@ -40,9 +40,34 @@ const options = ref<MaProTableOptions>({
   },
   // 搜索表单参数
   searchFormOptions: { labelWidth: '90px' },
-  // 请求配置
+  // 请求配置 - 使用静态数据测试
   requestOptions: {
-    api: page,
+    api: () => {
+      console.log('🎯 使用静态数据API')
+      return Promise.resolve({
+        code: 200,
+        message: '成功',
+        data: {
+          list: [
+            {
+              id: 1,
+              name: 'edfaed',
+              price: '111.00',
+              status: 1,
+              created_at: '2025-08-25 02:01:06'
+            },
+            {
+              id: 2, 
+              name: '测试商品2',
+              price: '299.99',
+              status: 2,
+              created_at: '2025-08-25 03:15:22'
+            }
+          ],
+          total: 2
+        }
+      })
+    },
     beforeRequest: (params: any) => {
       console.log('📤 发起API请求，参数:', params)
       return params
