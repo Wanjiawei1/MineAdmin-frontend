@@ -1,38 +1,24 @@
 <script setup lang="tsx">
 import { ref } from 'vue'
 import type { MaProTableOptions, MaProTableSchema } from '@mineadmin/pro-table'
+import { page } from '@/modules/goods/api/goods'
 
 defineOptions({ name: 'goods:goods' })
-
-// 模拟数据API
-function mockAPI() {
-  return Promise.resolve({
-    code: 200,
-    message: "成功",
-    data: {
-      list: [
-        {
-          id: 1,
-          name: 'edfaed',
-          price: '111.00',
-          status: 1,
-          created_at: '2025-08-25 02:01:06'
-        }
-      ],
-      total: 1
-    }
-  })
-}
 
 // 最简单的 MaProTable 配置
 const options = ref<MaProTableOptions>({
   requestOptions: {
-    api: mockAPI,
+    api: page,
   },
 })
 
 const schema = ref<MaProTableSchema>({
   tableColumns: [
+    {
+      label: 'ID',
+      dataIndex: 'id',
+      width: 80,
+    },
     {
       label: '商品名称',
       dataIndex: 'name',
@@ -40,11 +26,18 @@ const schema = ref<MaProTableSchema>({
     {
       label: '商品价格',
       dataIndex: 'price',
-    }
+    },
+    {
+      label: '状态',
+      dataIndex: 'status',
+      render: ({ record }) => {
+        return record.status === 1 ? '已上架' : '未上架'
+      },
+    },
   ],
 })
 
-console.log('MaProTable 配置加载完成')
+console.log('MaProTable 配置加载完成，使用真实API')
 </script>
 
 <template>
