@@ -1,6 +1,4 @@
 import type { MaFormItem } from '@mineadmin/form'
-import MaUploadImage from '@/components/ma-upload-image/index.vue'
-import MaDictRadio from '@/components/ma-dict-picker/ma-dict-radio.vue'
 
 export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any = (key: string) => key, model: any = {}): MaFormItem[] {
   return [
@@ -30,23 +28,27 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any = 
       },
     },
     {
-      label: '商品图片',
+      label: '商品图片URL',
       prop: 'image',
-      render: () => MaUploadImage,
+      render: 'input',
       cols: { md: 24, xs: 24 },
+      renderProps: {
+        placeholder: '请输入商品图片URL地址',
+      },
       itemProps: {
-        rules: [{ required: true, message: '请上传商品图片' }],
+        rules: [{ required: true, message: '商品图片URL不能为空' }],
       },
     },
     {
       label: '上架状态',
       prop: 'status',
-      render: () => MaDictRadio,
+      render: 'radio-group',
       cols: { md: 12, xs: 24 },
       renderProps: {
-        renderMode: 'button',
-        placeholder: '请选择上架状态',
-        dictName: 'system-status',
+        options: [
+          { label: '已上架', value: 1 },
+          { label: '未上架', value: 2 },
+        ],
       },
       itemProps: {
         rules: [{ required: true, message: '请选择上架状态' }],
