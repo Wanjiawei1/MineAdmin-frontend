@@ -1,6 +1,7 @@
 <script setup lang="tsx">
 import { ref } from 'vue'
-import type { MaProTableOptions, MaProTableSchema } from '@mineadmin/pro-table'
+import type { MaProTableExpose, MaProTableOptions, MaProTableSchema } from '@mineadmin/pro-table'
+import type { Ref } from 'vue'
 import { page } from '@/modules/goods/api/goods'
 
 console.log('🔥 商品管理页面开始加载...')
@@ -8,6 +9,9 @@ console.log('🔥 商品管理页面开始加载...')
 const testData = ref([
   { id: 1, name: 'edfaed', price: '111.00', status: 1 }
 ])
+
+// 添加表格引用
+const proTableRef = ref<MaProTableExpose>() as Ref<MaProTableExpose>
 
 // 完整的 MaProTable 配置（参考用户管理页面）
 const options = ref<MaProTableOptions>({
@@ -86,16 +90,25 @@ const schema = ref<MaProTableSchema>({
 console.log('🔥 组件数据准备完成:', testData.value)
 console.log('🔥 MaProTable配置已准备:', { options: options.value, schema: schema.value })
 
-// 手动测试API（确保API本身工作正常）
+// 手动测试API和表格刷新
 setTimeout(async () => {
   try {
     console.log('🧪 手动测试API...')
     const result = await page({ page: 1, page_size: 10 })
     console.log('✅ 手动API测试成功:', result)
+    
+    // 尝试手动刷新表格
+    if (proTableRef.value && proTableRef.value.refresh) {
+      console.log('🔄 尝试手动刷新表格...')
+      await proTableRef.value.refresh()
+      console.log('✅ 表格刷新完成')
+    } else {
+      console.log('❌ 表格引用未找到或没有refresh方法')
+    }
   } catch (error) {
-    console.error('❌ 手动API测试失败:', error)
+    console.error('❌ 测试失败:', error)
   }
-}, 2000)
+}, 3000)
 </script>
 
 <template>
@@ -120,7 +133,7 @@ setTimeout(async () => {
 
     <div style="margin: 20px 0;">
       <h2>MaProTable 测试</h2>
-      <MaProTable :options="options" :schema="schema" />
+      <MaProTable ref="proTableRef" :options="options" :schema="schema" />
     </div>
 
     <div style="margin: 20px 0;">
