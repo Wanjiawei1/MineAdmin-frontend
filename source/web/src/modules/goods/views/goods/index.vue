@@ -50,6 +50,25 @@ const maDialog = useDialog({
 
 // MaProTable 配置
 const options = ref<MaProTableOptions>({
+  // 表格距离底部的像素偏移适配
+  adaptionOffsetBottom: 161,
+  header: {
+    mainTitle: () => '商品管理',
+    subTitle: () => '管理所有商品信息',
+  },
+  // 搜索参数
+  searchOptions: {
+    fold: true,
+    text: {
+      searchBtn: () => '搜索',
+      resetBtn: () => '重置',
+      isFoldBtn: () => '展开',
+      notFoldBtn: () => '收起',
+    },
+  },
+  // 搜索表单参数
+  searchFormOptions: { labelWidth: '90px' },
+  // 请求配置
   requestOptions: {
     api: page,
     afterRequest: (res: any) => {
@@ -62,6 +81,9 @@ const options = ref<MaProTableOptions>({
 })
 
 const schema = ref<MaProTableSchema>({
+  // 搜索项
+  searchItems: [],
+  // 表格列
   tableColumns: [
     {
       label: 'ID',
